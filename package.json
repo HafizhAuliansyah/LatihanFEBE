@@ -1,0 +1,20 @@
+{
+   "name": "latihanfebe",
+   "version": "1.0.0",
+   "description": "Latihan kolaborasi Front End dan Back End",
+   "main": "server.js",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "nodemon index.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/HafizhAuliansyah/LatihanFEBE.git"
+   },
+   "author": "Hafizh",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/HafizhAuliansyah/LatihanFEBE/issues"
+   },
+   "homepage": "https://github.com/HafizhAuliansyah/LatihanFEBE#readme"
+}
