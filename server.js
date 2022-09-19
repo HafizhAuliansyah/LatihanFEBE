@@ -17,13 +17,13 @@ app.set("view engine", "vue");
 app.engine("vue", hbs.__express);
 
 const viewPath = path.join(__dirname, "src");
-app.set("src", viewPath);
+app.set("views", viewPath);
 
 // Use routing
 app.use(express.json());
 app.use("/", router);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
    console.log("Server is up on port " + port);
 });
