@@ -1,8 +1,18 @@
 <template>
   <form @submit.prevent="PostItem">
-    <input type="text" v-model="form.id" name="id_input" />
-    <input type="text" v-model="form.name" /><br />
-    <button type="submit" v-show="!updateSubmit" name="button">Save</button>
+    <input type="hidden" v-model="form.id" name="id_input" />
+
+    <h6>NIK<br /><input type="text" v-model="form.nik" /><br /></h6>
+    <h6>PHONE <br /><input type="text" v-model="form.phone" /><br /></h6>
+    <h6>
+      PROVIDERS<br />
+      <input type="text" v-model="form.providers" /><br />
+    </h6>
+    <input type="hidden" v-model="form.date" /><br />
+
+    <button type="submit" v-show="!updateSubmit" name="button">Save</button
+    ><br />
+
     <button
       type="button"
       v-show="updateSubmit"
@@ -13,7 +23,7 @@
     </button>
   </form>
 
-  <div class="Home">
+  <!-- <div class="Home">
     <h4>List Users</h4>
     <ul v-for="user in users" :key="user.id">
       <li>
@@ -27,17 +37,66 @@
         </button>
       </li>
     </ul>
-  </div>
+  </div> -->
+
+  <table class="table">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">id</th>
+        <th scope="col">NIK</th>
+        <th scope="col">PHONE</th>
+        <th scope="col">PROVIDERS</th>
+        <th scope="col">Date</th>
+        <th scope="col">action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="user in users" :key="user.id">
+        <th scope="row">{{ user.id }}</th>
+        <td>{{ user.nik }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.providers }}</td>
+        <td>{{ user.date }}</td>
+        <td>
+          <button
+            type="button"
+            v-on:click="Edit(user)"
+            name="button"
+            class="btn btn-primary"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            v-on:click="Delete(user)"
+            name="button"
+            class="btn btn-danger"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
 import axios from "axios";
+import swal from "sweetalert";
+
+import ModalView from "../components/ModalView.vue";
 export default {
+  components: {
+    // ModalView,
+  },
   data() {
     return {
       form: {
         id: "",
-        name: "",
+        nik: "",
+        phone: "",
+        providers: "",
+        date: new Date().toLocaleDateString("en-CA"),
       },
       users: [],
       updateSubmit: false,
@@ -48,13 +107,17 @@ export default {
   methods: {
     getItem() {
       axios
-        .get("http://localhost:3000/users")
+        .get("http://localhost:3000/users", {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         .then((response) => {
           this.users = response.data;
           console.log(response);
         })
         .catch(() => {
-          alert("error");
+          swal("Oops!", "Get Data Error", "error");
         });
     },
 
@@ -63,35 +126,45 @@ export default {
         .post("http://localhost:3000/users", this.form)
         .then(() => {
           this.getItem();
-          this.form.name = "";
-          alert("saved...");
+          this.form.nik = "";
+          this.form.phone = "";
+          this.form.providers = "";
+          this.form.date = "";
+          // alert("saved...");
+          swal("Good job!", "Saved", "success");
         })
         .catch((err) => {
           console.log(err);
-          alert("saving  error");
+          swal("Oops!", "Post Error", "error");
         });
     },
     Edit(user) {
       this.updateSubmit = true;
       this.form.id = user.id;
-      this.form.name = user.name;
+      this.form.nik = user.nik;
+      this.form.phone = user.phone;
+      this.form.providers = user.providers;
     },
     Update(form) {
       axios
         .put(`http://localhost:3000/users/${form.id}`, {
-          name: this.form.name,
+          nik: this.form.nik,
+          phone: this.form.phone,
+          providers: this.form.providers,
         })
         .then(() => {
           this.getItem();
           this.form.id = "";
-          this.form.name = "";
+          this.form.nik = "";
+          this.form.phone = "";
+          this.form.providers = "";
           this.updateSubmit = false;
-          alert("updated...");
+          swal("Good job!", "Updated", "success");
         })
         .catch((err) => {
           console.log(err);
           console.warn();
-          alert("Error...");
+          swal("Good job!", "error Delete", "error");
         });
     },
     Delete(user) {
@@ -100,11 +173,15 @@ export default {
         .then(() => {
           this.getItem();
           this.form.name = "";
-          alert("Deleted...");
+          // alert("Deleted...");
+          swal("Good job!", "Delete", "success");
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    Modal() {
+      <ModalView />;
     },
   },
 
@@ -117,5 +194,9 @@ export default {
 <style>
 .Home {
   margin: 10px;
+}
+.table {
+  margin-left: 10px;
+  margin-right: 50px;
 }
 </style>
