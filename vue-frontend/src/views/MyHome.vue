@@ -1,6 +1,6 @@
 <template>
    <form @submit.prevent="PostItem">
-      <input type="hidden" v-model="form.id" name="id_input" />
+      <input type="hidden" v-model="form._id" name="id_input" />
 
       <h6>NIK<br /><input type="text" v-model="form.nik" /><br /></h6>
       <h6>PHONE <br /><input type="text" v-model="form.phone" /><br /></h6>
@@ -43,12 +43,12 @@
          </tr>
       </thead>
       <tbody>
-         <tr v-for="user in users" :key="user.id">
-            <th scope="row">{{ user.id }}</th>
+         <tr v-for="user in users" :key="user._id">
+            <th scope="row">{{ user._id }}</th>
             <td>{{ user.nik }}</td>
             <td>{{ user.phone }}</td>
             <td>{{ user.providers }}</td>
-            <td>{{ user.date }}</td>
+            <td>{{ user.registration_date }}</td>
             <td>
                <button type="button" v-on:click="Edit(user)" name="button" class="btn btn-primary">Edit</button>
                <button type="button" v-on:click="Delete(user)" name="button" class="btn btn-danger">Delete</button>
@@ -79,7 +79,7 @@ export default {
    methods: {
       getItem() {
          axios
-            .get("http://localhost:3000/sim")
+            .get("http://localhost:3000/users")
             .then((response) => {
                this.users = response.data;
                console.log(response);
@@ -91,7 +91,7 @@ export default {
 
       PostItem() {
          axios
-            .post("http://localhost:3000/sim", this.form)
+            .post("http://localhost:3000/users", this.form)
             .then(() => {
                this.getItem();
                this.form.name = "";
@@ -109,7 +109,7 @@ export default {
       },
       Update(form) {
          axios
-            .put(`http://localhost:3000/sim/${form.id}`, {
+            .put(`http://localhost:3000/users/${form.id}`, {
                name: this.form.name,
             })
             .then(() => {
