@@ -133,7 +133,7 @@ export default {
         })
         .then((response) => {
           this.getItem();
-          //  this.form.id = "";
+          this.form._id = "";
           this.form.nik = "";
           this.form.phone = "";
           this.form.providers = "";
@@ -162,9 +162,6 @@ export default {
           swal("Cannot Delete", "Delete", "error");
         });
     },
-    Modal() {
-      <ModalView />;
-    },
   },
 
   mounted() {
@@ -178,6 +175,7 @@ export default {
   margin: 10px;
 }
 .table {
+  width: 100%;
   margin-left: 10px;
   margin-right: 50px;
 }
