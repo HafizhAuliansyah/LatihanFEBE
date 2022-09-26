@@ -9,6 +9,5 @@ module.exports = {
       'Access-Control-Allow-Origin': '*'
     },
     port: 8081,
-    Proxy: 'http://192.168.1.13:8080'
   }
 }
